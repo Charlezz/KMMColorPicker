@@ -14,6 +14,11 @@ kotlin {
                 jvmTarget = "1.8"
             }
         }
+
+        dependencies {
+            implementation(libs.coil)
+        }
+
     }
     iosX64()
     iosArm64()
@@ -46,8 +51,8 @@ kotlin {
 
 android {
     namespace = "com.bluestars.colorpicker"
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
-        minSdk = 24
+        minSdk = 28
     }
 }

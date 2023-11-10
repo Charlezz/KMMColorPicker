@@ -5,6 +5,6 @@ import com.bluestars.colorpicker.model.BitmapImage
 /**
  * @author soohwan.ok
  */
-expect interface DecodeImageUseCase {
-    open fun decode(target:Any):BitmapImage
+expect class ImageDecoder {
+    suspend fun decode(target:Any):BitmapImage
 }

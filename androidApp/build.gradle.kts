@@ -5,10 +5,10 @@ plugins {
 
 android {
     namespace = "com.bluestars.colorpicker.android"
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
         applicationId = "com.bluestars.colorpicker.android"
-        minSdk = 24
+        minSdk = 28
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -46,4 +46,5 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.4.3")
     implementation("androidx.compose.material:material:1.4.3")
     implementation("androidx.activity:activity-compose:1.7.1")
+    implementation(libs.coil.compose)
 }
