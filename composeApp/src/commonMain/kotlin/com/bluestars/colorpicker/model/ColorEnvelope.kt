@@ -7,8 +7,8 @@ package com.bluestars.colorpicker.model
  * @param hexCode Color hex code, which represents [color] value.
  * @param fromUser Represents this event is triggered by user or not.
  */
-data class ColorEnvelope(
-    val color : Int,
-    val hexCode : String,
-    val fromUser : Boolean
-)
+//data class ColorEnvelope(
+//    val color : Int,
+//    val hexCode : String,
+//    val fromUser : Boolean
+//)

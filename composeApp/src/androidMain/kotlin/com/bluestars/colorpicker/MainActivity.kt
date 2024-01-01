@@ -62,6 +62,8 @@ class MainActivity : ComponentActivity() {
 sealed class Screen(val route: String, val name: String) {
     data object ImagePicker : Screen("image_picker", "Image")
     data object ColorPicker : Screen("color_picker", "Color")
+
+    data object Choice : Screen("choice" ,"choice")
 }
 
 @Composable
@@ -74,8 +76,14 @@ fun NavScreen(
     val navController = rememberNavController()
     NavHost(
         navController,
-        startDestination = Screen.ImagePicker.route
+        startDestination = Screen.Choice.route
     ) {
+        composable(Screen.Choice.route){
+            ChoiceScreen(
+               onImageRoute =  {navController.navigate(Screen.ImagePicker.route)},
+                onColorRoute =  {navController.navigate(Screen.ColorPicker.route)}
+            )
+        }
         composable(Screen.ImagePicker.route) {
             AppScreen(
                 dominantColor = dominantColor,
@@ -85,7 +93,8 @@ fun NavScreen(
             )
         }
         composable(Screen.ColorPicker.route) {
-            //TODO ColorScreen()
+            ImageColorPickerScreen()
+
         }
     }
 }
