@@ -31,6 +31,8 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+//            implementation(libs.androidx.compose.runtime)
+            implementation(libs.androidx.compose.navigation)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -76,5 +78,8 @@ android {
         debugImplementation(libs.compose.ui.tooling)
         implementation(libs.coil.compose)
     }
+}
+dependencies {
+    implementation(libs.androidx.navigation.runtime.ktx)
 }
 
