@@ -7,7 +7,3 @@ captures
 .externalNativeBuild
 .cxx
 local.properties
-xcuserdata
-project.pbxproj
-Pods/
-Podfile.lock
