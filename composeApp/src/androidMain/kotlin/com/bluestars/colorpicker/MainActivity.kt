@@ -19,7 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
-import com.bluestars.colorpicker.model.BitmapImage
+import com.bluestars.colorpicker.model.BSImage
 import com.bluestars.colorpicker.usecase.ImageDecoder
 import kotlinx.coroutines.launch
 
@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
             val localContext = LocalContext.current
             var uri: Uri? by remember { mutableStateOf(null) }
             var dominantColor: Color? by remember { mutableStateOf(null) }
-            var bitmapImageT: BitmapImage? by remember { mutableStateOf(null) }
+            var BSImageT: BSImage? by remember { mutableStateOf(null) }
             var hexString by remember { mutableStateOf("") }
 
             val pickerLauncher =
@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                         coroutineScope.launch {
                             val bitmapImage = ImageDecoder(localContext).decode(newUri)
                             val colorInt = GetDominantColorUseCase.invoke(bitmapImage)
-                            bitmapImageT = bitmapImage
+                            BSImageT = bitmapImage
                             dominantColor = Color(colorInt)
                             hexString = String.format("#%02X%02X%02X", (dominantColor!!.red * 255).toInt(), (dominantColor!!.green * 255).toInt(), (dominantColor!!.blue * 255).toInt())
                         }
@@ -49,9 +49,8 @@ class MainActivity : ComponentActivity() {
                 }
                 NavScreen(
                     uri = uri,
-                    bitmapImage =bitmapImageT,
+                    BSImage =BSImageT,
                     dominantColor = dominantColor,
-                    hexString = hexString,
                     onBackClick = {finish()},
                     onImagePick = { pickerLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
                 )
@@ -77,9 +76,8 @@ sealed class Screen(val route: String, val name: String) {
 @Composable
 fun NavScreen(
     dominantColor : Color?,
-    bitmapImage: BitmapImage?,
+    BSImage: BSImage?,
     uri : Uri?,
-    hexString : String?,
     onBackClick :()->Unit,
     onImagePick :()->Unit
     ) {
@@ -97,7 +95,6 @@ fun NavScreen(
         composable(Screen.ImagePicker.route) {
             AppScreen(
                 dominantColor = dominantColor,
-                colorHex = hexString,
                 image = rememberAsyncImagePainter(model = uri),
                 onBackClick = onBackClick , // finish()
                 onImagePick = onImagePick
@@ -105,7 +102,7 @@ fun NavScreen(
         }
         composable(Screen.ColorPicker.route) {
             ImageColorPickerScreen(
-                bitmapImage =  bitmapImage,
+                BSImage =  BSImage,
                 onBackClick = onBackClick , // finish()
                 onImagePick = onImagePick,
             )

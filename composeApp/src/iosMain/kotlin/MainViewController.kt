@@ -1,6 +1,7 @@
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -11,9 +12,11 @@ import androidx.compose.ui.interop.LocalUIViewController
 import androidx.compose.ui.window.ComposeUIViewController
 import com.bluestars.colorpicker.AppScreen
 import com.bluestars.colorpicker.GetDominantColorUseCase
-import com.bluestars.colorpicker.model.BitmapImage
+import com.bluestars.colorpicker.model.BSImage
+import com.bluestars.colorpicker.usecase.ImageDecoder
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.get
+import kotlinx.coroutines.launch
 import org.jetbrains.skia.ColorAlphaType
 import org.jetbrains.skia.ColorType
 import org.jetbrains.skia.Image
@@ -39,34 +42,39 @@ import platform.UniformTypeIdentifiers.UTTypeJPEG
 import platform.darwin.NSObject
 
 fun MainViewController() = ComposeUIViewController {
+    val coroutineScope = rememberCoroutineScope()
     val uiViewController = LocalUIViewController.current
     var imageBitmap:ImageBitmap? by remember { mutableStateOf( null) }
     var dominantColor:Color? = imageBitmap?.let {iBitmap->
         val buffer = IntArray(iBitmap.width * iBitmap.height)
         iBitmap.readPixels(buffer)
-        val bitmapImage = BitmapImage(
+        val bSImage = BSImage(
             buffer = buffer,
             width = iBitmap.width,
             height = iBitmap.height
         )
-        Color(GetDominantColorUseCase(bitmapImage))
+        Color(GetDominantColorUseCase(bSImage))
     }
     val pickerDelegate = remember {
         object : NSObject(), PHPickerViewControllerDelegateProtocol {
             override fun picker(picker: PHPickerViewController, didFinishPicking: List<*>) {
                 picker.dismissViewControllerAnimated(flag = false, completion = {})
-                val image = didFinishPicking.firstOrNull() as? PHPickerResult
-                image?.run {
+                val phPickerResult = didFinishPicking.firstOrNull() as? PHPickerResult
+                // 대표 픽셀 추출
+                coroutineScope.launch {
+                    val bsImage = ImageDecoder().decode(phPickerResult!!)
+                    dominantColor = Color(GetDominantColorUseCase(bsImage))
+                }
+                // 이미지
+                phPickerResult?.run {
                     this.itemProvider.loadDataRepresentationForTypeIdentifier(UTTypeJPEG.identifier){ data, error->
                         data?.run {
                             val uiImage = UIImage(data = this)
                             // resize를 어떻게 해야하는지 모르겠음
-                            imageBitmap= uiImage.toSkiaImage()?.toComposeImageBitmap()
+                            imageBitmap = uiImage.toSkiaImage()?.toComposeImageBitmap()
                         }
-
                     }
                 }
-
             }
         }
     }
@@ -77,10 +85,10 @@ fun MainViewController() = ComposeUIViewController {
     AppScreen(
         dominantColor = dominantColor,
         image = imageBitmap?.let { BitmapPainter(it) }?:ColorPainter(Color.White),
-        onBackClick = {},
+        onBackClick = { },
         onImagePick = {
             uiViewController.presentViewController(pickerController, animated = true, completion = null)
-        }
+        },
     )
 }
 

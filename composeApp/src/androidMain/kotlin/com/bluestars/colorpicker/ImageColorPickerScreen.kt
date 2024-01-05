@@ -39,7 +39,6 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
@@ -50,11 +49,11 @@ import com.bluestars.colorpicker.component.ColorEnvelope
 import com.bluestars.colorpicker.component.ColorPickerController
 import com.bluestars.colorpicker.component.ImageColorPicker
 import com.bluestars.colorpicker.component.rememberColorPickerController
-import com.bluestars.colorpicker.model.BitmapImage
+import com.bluestars.colorpicker.model.BSImage
 
 @Composable
 fun ImageColorPickerScreen(
-    bitmapImage: BitmapImage?,
+    BSImage: BSImage?,
     onBackClick: () -> Unit,
     onImagePick: () -> Unit,
 ) {
@@ -83,8 +82,8 @@ fun ImageColorPickerScreen(
                     .verticalScroll(state = rememberScrollState())
             ) {
 
-                if (bitmapImage != null) {
-                    val imageBitmap = bitmapImage.toImageBitmap()
+                if (BSImage != null) {
+                    val imageBitmap = BSImage.toImageBitmap()
                     Spacer(modifier = Modifier.weight(1f))
 
                     PhotoPickerIcon(controller)
@@ -134,7 +133,7 @@ fun ImageColorPickerScreen(
 internal val defaultTileOddColor: Color = Color(0xFFFFFFFF)
 internal val defaultTileEvenColor: Color = Color(0xFFCBCBCB)
 
-private fun BitmapImage.toImageBitmap(): ImageBitmap {
+private fun BSImage.toImageBitmap(): ImageBitmap {
     // Create an android.graphics.Bitmap
     val androidBitmap = android.graphics.Bitmap.createBitmap(width, height, android.graphics.Bitmap.Config.ARGB_8888)
     androidBitmap.setPixels(buffer, 0, width, 0, 0, width, height)

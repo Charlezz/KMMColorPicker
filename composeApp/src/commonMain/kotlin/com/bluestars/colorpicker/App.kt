@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -33,7 +32,6 @@ import androidx.compose.ui.unit.TextUnitType
 @Composable
 fun AppScreen(
     dominantColor:Color?,
-    colorHex: String?,
     image :Painter,
     onBackClick :()->Unit,
     onImagePick :()->Unit,
@@ -90,7 +88,7 @@ fun AppScreen(
                             Text(
                                 modifier = Modifier.background(color = Color.Black).align(
                                     Alignment.TopCenter),
-                                text = "$colorHex",
+                                text = dominantColor.toHexCode(),
                                 color = Color.White,
                                 fontSize = TextUnit(20f, TextUnitType.Sp )
                             )
@@ -107,6 +105,14 @@ fun AppScreen(
                 }
             }
         )
+
     }
 }
 
+
+private fun Color.toHexCode():String{
+    val r = (red * 255f).toInt().toString(16)
+    val g = (green * 255f).toInt().toString(16)
+    val b = (blue * 255f).toInt().toString(16)
+    return "#${r}${g}${b}"
+}

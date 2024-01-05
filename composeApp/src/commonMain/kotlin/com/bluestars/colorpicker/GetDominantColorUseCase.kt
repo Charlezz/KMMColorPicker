@@ -1,6 +1,6 @@
 package com.bluestars.colorpicker
 
-import com.bluestars.colorpicker.model.BitmapImage
+import com.bluestars.colorpicker.model.BSImage
 import com.bluestars.colorpicker.Color.blue
 import com.bluestars.colorpicker.Color.green
 import com.bluestars.colorpicker.Color.red
@@ -19,9 +19,9 @@ object GetDominantColorUseCase {
      * @return 대표 색상
      */
     operator fun invoke(
-        image: BitmapImage
+        image: BSImage
     ): Int {
-        // 대표 색상 계산 로직 작성
+
         val colorMap = mutableMapOf<Int, Int>()
         val width = image.width // 10
         val height = image.height //10
@@ -36,7 +36,7 @@ object GetDominantColorUseCase {
                     }
                     colorMap[quantizedArgb] = ++counter
                 } else {
-                    println("회색조 발견")
+                    println("무채색 Pass")
                 }
             }
         }
