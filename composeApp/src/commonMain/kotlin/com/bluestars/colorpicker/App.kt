@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.TextUnitType
 @Composable
 fun AppScreen(
     dominantColor:Color?,
+    colorHex: String?,
     image :Painter,
     onBackClick :()->Unit,
     onImagePick :()->Unit,
@@ -78,10 +79,18 @@ fun AppScreen(
                                 painter = ColorPainter(dominantColor!!),
                                 contentDescription = null
                             )
+
                             Text(
                                 modifier = Modifier.background(color = Color.Black).align(
                                     Alignment.Center),
                                 text = "(${(dominantColor.red * 255f).toInt()}, ${(dominantColor.green * 255f).toInt()}, ${(dominantColor.blue * 255f).toInt()})",
+                                color = Color.White,
+                                fontSize = TextUnit(20f, TextUnitType.Sp )
+                            )
+                            Text(
+                                modifier = Modifier.background(color = Color.Black).align(
+                                    Alignment.TopCenter),
+                                text = "$colorHex",
                                 color = Color.White,
                                 fontSize = TextUnit(20f, TextUnitType.Sp )
                             )
@@ -100,3 +109,4 @@ fun AppScreen(
         )
     }
 }
+
