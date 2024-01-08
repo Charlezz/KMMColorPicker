@@ -40,6 +40,7 @@ compose-material = { module = "androidx.compose.material:material", version.ref 
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version = "2.7.6" }
+androidx-core = { group = "androidx.core", name = "core", version = "1.12.0" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

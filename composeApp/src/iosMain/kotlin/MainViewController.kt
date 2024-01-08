@@ -9,9 +9,11 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.interop.LocalUIViewController
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.ComposeUIViewController
 import com.bluestars.colorpicker.AppScreen
 import com.bluestars.colorpicker.GetDominantColorUseCase
+import com.bluestars.colorpicker.GetRandomColorUseCase
 import com.bluestars.colorpicker.model.BSImage
 import com.bluestars.colorpicker.usecase.ImageDecoder
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -45,6 +47,7 @@ fun MainViewController() = ComposeUIViewController {
     val coroutineScope = rememberCoroutineScope()
     val uiViewController = LocalUIViewController.current
     var imageBitmap:ImageBitmap? by remember { mutableStateOf( null) }
+    var randomSelectColor : Color? by remember { mutableStateOf(null) }
     var dominantColor:Color? = imageBitmap?.let {iBitmap->
         val buffer = IntArray(iBitmap.width * iBitmap.height)
         iBitmap.readPixels(buffer)
@@ -55,6 +58,7 @@ fun MainViewController() = ComposeUIViewController {
         )
         Color(GetDominantColorUseCase(bSImage))
     }
+
     val pickerDelegate = remember {
         object : NSObject(), PHPickerViewControllerDelegateProtocol {
             override fun picker(picker: PHPickerViewController, didFinishPicking: List<*>) {
@@ -64,6 +68,7 @@ fun MainViewController() = ComposeUIViewController {
                 coroutineScope.launch {
                     val bsImage = ImageDecoder().decode(phPickerResult!!)
                     dominantColor = Color(GetDominantColorUseCase(bsImage))
+                    randomSelectColor = Color(GetRandomColorUseCase(bsImage))
                 }
                 // 이미지
                 phPickerResult?.run {
@@ -84,11 +89,16 @@ fun MainViewController() = ComposeUIViewController {
     pickerController.setDelegate(pickerDelegate)
     AppScreen(
         dominantColor = dominantColor,
+        randomSelectColor = randomSelectColor,
         image = imageBitmap?.let { BitmapPainter(it) }?:ColorPainter(Color.White),
         onBackClick = { },
         onImagePick = {
             uiViewController.presentViewController(pickerController, animated = true, completion = null)
         },
+        clickedColor =  null,
+        clickedPosition =  null,
+        imageSize = IntSize.Zero
+
     )
 }
 
