@@ -68,7 +68,7 @@ fun MainViewController() = ComposeUIViewController {
                 coroutineScope.launch {
                     val bsImage = ImageDecoder().decode(phPickerResult!!)
                     dominantColor = Color(GetDominantColorUseCase(bsImage))
-                    randomSelectColor = Color(GetColorByPositionUseCase(bsImage))
+//                    randomSelectColor = Color(GetColorByPositionUseCase(bsImage))
                 }
                 // 이미지
                 phPickerResult?.run {
@@ -89,7 +89,6 @@ fun MainViewController() = ComposeUIViewController {
     pickerController.setDelegate(pickerDelegate)
     AppScreen(
         dominantColor = dominantColor,
-        randomSelectColor = randomSelectColor,
         image = imageBitmap?.let { BitmapPainter(it) }?:ColorPainter(Color.White),
         onBackClick = { },
         onImagePick = {
@@ -97,8 +96,10 @@ fun MainViewController() = ComposeUIViewController {
         },
         clickedColor =  null,
         clickedPosition =  null,
-        imageSize = IntSize.Zero
-
+        imageSize = IntSize.Zero,
+        imageAspectRatio = 1f,
+        onImageSize = { },
+        onImageClick = {}
     )
 }
 
