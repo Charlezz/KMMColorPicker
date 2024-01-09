@@ -12,11 +12,11 @@ import com.bluestars.colorpicker.model.BSImage
 actual class ImageDecoder constructor(
     private val context: Context
 ) {
-    actual suspend fun decode(target: Any): BSImage {
+    actual suspend fun decode(target: Any,size: Int): BSImage {
         val imageLoader = ImageLoader(context)
         val imageRequest = ImageRequest.Builder(context)
             .data(target)
-            .size(120)
+            .size(size)
             .allowHardware(false)
             .target(object : Target {
             }).build()

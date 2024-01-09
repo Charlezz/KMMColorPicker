@@ -48,13 +48,15 @@ import androidx.compose.ui.unit.TextUnitType
 fun AppScreen(
     dominantColor: Color?,
 //    clickedColor : Color?,
-    randomSelectColor: Color?,
     clickedColor: Color?,
     clickedPosition: Offset?,
     imageSize: IntSize,
     image: Painter,
+    imageAspectRatio : Float,
     onBackClick: () -> Unit,
     onImagePick: () -> Unit,
+    onImageClick : (Offset) -> Unit,
+    onImageSize : (IntSize) -> Unit
 //    updateClickedColor: (Offset, IntSize, Painter) -> Unit,
 
     ) {
@@ -83,20 +85,17 @@ fun AppScreen(
                     Image(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .aspectRatio(1f)
+                            .aspectRatio(imageAspectRatio)
                             .pointerInput(Unit) {
                                     detectTapGestures { offset ->
-                                        val pixelX =
-                                            (offset.x / imageSize.width * image.intrinsicSize.width).toInt()
-                                        val pixelY =
-                                            (offset.y / imageSize.height * image.intrinsicSize.height).toInt()
-                                        println("pixelX :$pixelX , pixelY :$pixelY" )
-                                        println("offsetX :${offset.x} , offsetY :${offset.y}" )
+                                            onImageClick(offset)
 
                                     }
                             }
-                            .onGloballyPositioned { layoutCoordinates ->
-                            },
+                            .onGloballyPositioned {
+                                                  onImageSize(it.size)
+                            }
+                        ,
                         painter = image,
                         contentDescription = null,
                         contentScale = ContentScale.Crop
@@ -130,15 +129,6 @@ fun AppScreen(
                                     text = "(${(color.red * 255f).toInt()}, ${(color.green * 255f).toInt()}, ${(color.blue * 255f).toInt()})",
                                     color = Color.White,
                                     fontSize = TextUnit(20f, TextUnitType.Sp)
-                                )
-                            }
-                            if(randomSelectColor != null){
-                                Text(
-                                    modifier = Modifier.background(color = Color.Black).align(
-                                        Alignment.CenterEnd),
-                                    text = "(${(randomSelectColor.red * 255f).toInt()}, ${(randomSelectColor.green * 255f).toInt()}, ${(randomSelectColor.blue * 255f).toInt()})",
-                                    color = Color.White,
-                                    fontSize = TextUnit(20f, TextUnitType.Sp )
                                 )
                             }
                             Text(

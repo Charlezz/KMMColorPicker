@@ -14,7 +14,7 @@ import kotlin.coroutines.suspendCoroutine
  * @author soohwan.ok
  */
 actual class ImageDecoder {
-    actual suspend fun decode(target:Any): BSImage {
+    actual suspend fun decode(target:Any, size : Int): BSImage {
         val image = target as? PHPickerResult
         var imageBitmap: ImageBitmap? = null
         var buffer:IntArray? = null

@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.ComposeUIViewController
 import com.bluestars.colorpicker.AppScreen
 import com.bluestars.colorpicker.GetDominantColorUseCase
-import com.bluestars.colorpicker.GetRandomColorUseCase
+import com.bluestars.colorpicker.GetColorByPositionUseCase
 import com.bluestars.colorpicker.model.BSImage
 import com.bluestars.colorpicker.usecase.ImageDecoder
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -68,7 +68,7 @@ fun MainViewController() = ComposeUIViewController {
                 coroutineScope.launch {
                     val bsImage = ImageDecoder().decode(phPickerResult!!)
                     dominantColor = Color(GetDominantColorUseCase(bsImage))
-                    randomSelectColor = Color(GetRandomColorUseCase(bsImage))
+                    randomSelectColor = Color(GetColorByPositionUseCase(bsImage))
                 }
                 // 이미지
                 phPickerResult?.run {
